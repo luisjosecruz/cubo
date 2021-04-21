@@ -1,0 +1,98 @@
+/*  -------------------------------------------------------------
+  FONTS
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/*  -------------------------------------------------------------
+  DEFAULT
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+html{
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+*,
+*::after,
+*::before {
+    box-sizing: inherit;
+    font-family: inherit;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+}
+
+ul, ol{
+    list-style: none;
+}
+
+a{
+    text-decoration: none;
+}
+
+
+/*  -------------------------------------------------------------
+  HEADER
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+.header{
+    width: 100%;
+    background: #151515;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 50px;
+    height: 60px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+/*  Menu
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.menu{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu nav ul li{
+    display: inline-block;
+}
+
+.menu_item{
+    color: #ffffff;
+    font-size: 16px;
+    padding: 0 20px;
+}
+
+/*  Logo
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.logo a{
+    display: flex;
+    align-items: center;
+    font-size: 30px;
+    color: #ffffff;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.logo a img{
+    width: 30px;
+    margin-right: 5px;
+}
+
+.logo a span sub{
+    font-size: 15px;
+    font-weight: 500;
+    text-transform: lowercase;
+}
+
+/*  User account
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.user-config{
+    width: 40px;
+    height: 60px;
+    display: flex;
+    cursor: pointer;
+}
+
