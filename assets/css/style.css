@@ -29,6 +29,7 @@ ul, ol{
 
 a{
     text-decoration: none;
+    color: inherit;
 }
 
 
@@ -43,7 +44,7 @@ a{
     align-items: center;
     justify-content: space-between;
     padding: 0 50px;
-    height: 60px;
+    height: 50px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
 
@@ -56,13 +57,24 @@ a{
 }
 
 .menu nav ul li{
-    display: inline-block;
+    display: inline-flex;
+    height: 50px;
+    align-items: flex-end;
 }
 
 .menu_item{
-    color: #ffffff;
-    font-size: 16px;
-    padding: 0 20px;
+    color: #eeeeee;
+    font-size: 14px;
+    padding: 0 15px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    border-radius: 5px 5px 0px 0px;
+    background: #212121;
+}
+
+.menu_item i{
+    margin-right: 5px;
 }
 
 /*  Logo
@@ -89,10 +101,83 @@ a{
 
 /*  User account
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.account{
+    display: flex;
+    align-items: center;
+    justify-self: center;
+}
+
 .user-config{
-    width: 40px;
+    width: 30px;
     height: 60px;
     display: flex;
+    margin: 0 5px;
+}
+
+.user-options{
+    height: 33px;
+    width: 33px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100px;
+    background: #2e2e2e;
+    color: #eeeeee;
     cursor: pointer;
 }
 
+/*  User Options
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.wraper-options{
+    position: absolute;
+    top: 60px;
+    background: #212121;
+    width: 300px;
+    right: 40px;
+    border-radius: 5px;
+    padding: 20px;
+    color: #aaaaaa;
+    box-shadow: -1px 2px 7px rgba(0,0,0,0.5);
+    display: none;
+}
+
+.wraper-options.show{
+    display: block;
+}
+
+.wraper-options p{
+    margin: 0;
+}
+
+.wrapper-options-name{
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.wrapper-options-email{
+    font-size: 12px;
+}
+
+.wrapper-options-menu{
+    margin: 30px 0px 10px 0px;
+    padding: 0;
+}
+
+.wrapper-options-menu li a{
+    display: block;
+    margin: 5px 0;
+    padding: 10px 5px;
+    transition: background .15s;
+    border-radius: 5px;
+}
+
+.wrapper-options-menu li a i{
+    background: #2e2e2e;
+    border-radius: 100px;
+    margin-right: 5px;
+    padding: 5px;
+}
+
+.wrapper-options-menu li a:hover{
+    background: #2e2e2e;
+}

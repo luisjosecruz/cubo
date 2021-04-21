@@ -17,4 +17,5 @@ Web Application to transfer pages of the newspaper El Salvador and El Mundo
 ### Recursos Importantes ☼
 ##### Crear enlace para imágenes alojadas en Google Drive.
 * https://gdurl.com/ 
-##### Otros
+##### Iconos para usar en el sitio web
+* https://fontello.com/ 
