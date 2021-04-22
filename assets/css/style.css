@@ -32,6 +32,10 @@ a{
     color: inherit;
 }
 
+table{
+    border-collapse: collapse;
+}
+
 :root {
     --dark-00: #495057;
     --dark-10: #343a40;
@@ -260,7 +264,7 @@ a{
 
 .dash-panel-content{
     background: var(--white-00);
-    height: 100%;
+    height: calc(100% - 90px);
     border-radius: 10px;
     padding: 25px;
 }
@@ -340,4 +344,107 @@ a{
 
 .bg-green{
     background: var(--green-10);
+}
+
+/*  -------------------------------------------------------------
+  PANEL EDITIONS
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+.table-head{
+    width: 100%;
+    border-bottom: 1px solid var(--gray-30);
+}
+
+.table-head tr th{
+    font-weight: 100;
+    font-size: 14px;
+    padding: 10px 0;
+    text-align: left;
+}
+
+.dash-panel-table img{
+    width: 24px
+}
+
+.dash-panel-table table{
+    width: 100%;
+}
+
+.dash-panel-table tr td{
+    font-size: 12px;
+    font-weight: 100;
+    padding: 10px 0;
+    color: var(--dark-00);
+    border-bottom: 1px solid var(--gray-10);
+}
+
+.btn-report-edition{
+    padding: 3px;
+    font-size: 12px;
+    width: fit-content;
+    color: var(--gray-50);
+    cursor: pointer;
+}
+
+/*  -------------------------------------------------------------
+  PANEL PLIEGOS
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  Cards
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.card{
+    width: 100%;
+    background: var(--black-alpha-50);
+    border-radius: 10px;
+    padding: 20px;
+    color: var(--gray-00);
+    margin-bottom: 25px;
+}
+
+.card p{
+    margin: 0;
+}
+
+.card-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.card-header-title{
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.card-header-legend{
+    display: flex;
+}
+
+.card-header-legend span{
+    font-size: 10px;
+    margin-left: 10px;
+}
+
+.card-content ul li{
+    display: inline-block;
+}
+
+.card-element-like{
+    display: none;
+}
+
+.pliego-pages{
+    padding: 0;
+}
+
+.pliego-pages li p{
+    font-size: 12px;
+    background: var(--dark-00);
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
