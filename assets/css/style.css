@@ -71,10 +71,13 @@ table{
     --white-alpha-80: rgba(255, 255, 255, 0.8);
     --white-light: #edf2fb;
     --white-00: #ffffff;
+    --card-yellow: ##fcf6bd;
+    --card-green: #d0f4de;
+    --card-red: ##f9bec7;
+    --card-gary: ##dee2e6;
     --red-00: #ff5e5b;
     --green-10: #00A400;
 }
-
 
 /*  -------------------------------------------------------------
   HEADER
@@ -171,6 +174,11 @@ table{
     cursor: pointer;
 }
 
+.menu-phone{
+    margin: 0 20px;
+    display: none;
+}
+
 /*  User Options
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 .wraper-options{
@@ -264,11 +272,11 @@ table{
 
 .dash-panel-content{
     background: var(--white-00);
-    height: calc(100% - 90px);
+    max-height: calc(100vh - 150px);
     border-radius: 10px;
     padding: 25px;
+    overflow: auto;
 }
-
 
 /*  -------------------------------------------------------------
   BUTTONS
@@ -346,6 +354,14 @@ table{
     background: var(--green-10);
 }
 
+.c-green{
+    color: var(--green-10);
+}
+
+.c-red{
+    color: var(--red-00);
+}
+
 /*  -------------------------------------------------------------
   PANEL EDITIONS
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -394,11 +410,13 @@ table{
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 .card{
     width: 100%;
-    background: var(--black-alpha-50);
+    background: inherit;
     border-radius: 10px;
     padding: 20px;
-    color: var(--gray-00);
+    color: var(--dark-00);
     margin-bottom: 25px;
+    border: 1px solid var(--black-alpha-20);
+    box-shadow: 0px 16px 38px var(--shadow-1);
 }
 
 .card p{
@@ -407,14 +425,17 @@ table{
 
 .card-header{
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
+    flex-direction: column;
 }
 
 .card-header-title{
-    text-transform: uppercase;
-    font-size: 14px;
+    width: 100%;
+    font-size: 15px;
     font-weight: 600;
+    display: flex;
+    justify-content: space-between;
 }
 
 .card-header-legend{
@@ -423,15 +444,23 @@ table{
 
 .card-header-legend span{
     font-size: 10px;
-    margin-left: 10px;
+    margin-right: 10px;
+    color: var(--gray-50);
 }
 
 .card-content ul li{
     display: inline-block;
 }
 
-.card-element-like{
-    display: none;
+.card-footer{
+    border-top: 1px solid var(--white-alpha-10);
+    padding-top: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-footer p{
+    font-size: 18px;
 }
 
 .pliego-pages{
@@ -439,12 +468,136 @@ table{
 }
 
 .pliego-pages li p{
-    font-size: 12px;
-    background: var(--dark-00);
-    width: 30px;
-    height: 30px;
+    font-size: 11px;
+    background: var(--black-alpha-10);
+    color: var(--gray-50);
+    width: 28px;
+    height: 28px;
     border-radius: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.card-footer .page-tag{
+    font-size: 14px;
+    color: var(--gray-50);
+}
+
+/*  -------------------------------------------------------------
+  RESPONSIVE DESIGN
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+/*  1500px
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+@media screen and (max-width: 1458px){
+    .pliego-pages li p{
+        font-size: 9px;
+        width: 25px;
+        height: 25px;
+    }
+    /*.dash-panel-header-legend-item{
+        flex-direction: column;
+        border-radius: 5px;
+    }*/
+    .dash-panel-header-legend-item span:nth-child(2){
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1203px){
+    .dash-panel-buttons{
+        flex-direction: column;
+    }
+    .card-header-legend span span{
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1125px){
+    .menu nav{
+        display: none;
+    }
+    .menu-phone{
+        display: flex;
+    }
+    .dash-panel-content{
+        padding: 20px;
+    }
+    .card{
+        padding: 15px;
+    }
+    .card-footer{
+        border: none;
+    }
+}
+
+@media screen and (max-width: 990px){
+    .dash-panel:nth-child(1),
+    .dash-panel:nth-child(2),
+    .dash-panel:nth-child(3){
+        grid-column: 1/5;
+        padding: 50px 100px;
+    }
+    .dash-panel:nth-child(2),
+    .dash-panel:nth-child(3){
+        display: none;
+    }
+    .dash-panel-buttons{
+        flex-direction: row;
+    }
+    .dash-panel-content{
+        max-height: 100%;
+    }
+    .dash-panel-table tr td{
+        padding: 20px 0
+    }
+}
+
+@media screen and (max-width: 794px){
+    .dash-panel:nth-child(1){
+        padding: 50px;
+    }
+}
+
+@media screen and (max-width: 694px){
+    .dash-panel:nth-child(1){
+        padding: 50px ;
+    }
+    .dash-panel-buttons{
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+@media screen and (max-width: 570px){
+    .dash-panel:nth-child(1){
+        padding: 50px 20px;
+    }
+    .dash-panel-buttons{
+        padding: 25px 0;
+    }
+    .header{
+        padding: 0 20px;
+    }
+}
+
+@media screen and (max-width: 470px){
+    .table-head tr th:nth-child(6),
+    .dash-panel-table tr td:nth-child(6),
+    .panel_date_range{
+        display: none;
+    }
+}
+
+@media screen and (max-width: 400px){
+    .dash-panel:nth-child(1){
+        padding: 50px 0;
+    }
+    .table-head tr th:nth-child(8),
+    .dash-panel-table tr td:nth-child(8){
+        display: none;
+    }
 }

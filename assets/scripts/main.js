@@ -3,7 +3,7 @@ $(document).ready(function(){
     DECLARACIÓN DE CONSTANTES
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
     const doc = $(document);
-    const user_options = $(".user-options");
+    const user_options = $(".user-options-btn");
     const wrapper_options = $(".wraper-options");
 
 /*  -------------------------------------------------------------
@@ -21,5 +21,19 @@ $(document).ready(function(){
     doc.click(() => {
         wrapper_options.removeClass("show")
     });
+
+    if(screen.width < 990){
+        $(".dash-panel-table tr td").click(function(){
+            console.log(this);
+            $(".dash-editions").hide();
+            $(".dash-sheets").show();
+        });
+
+        $(".card").click(function(){
+            $(".dash-editions").hide();
+            $(".dash-sheets").hide();
+            $(".dash-pages").show();
+        });
+    }
 
 });
