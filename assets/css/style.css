@@ -241,11 +241,12 @@ table{
 
 .dashboard{
     width: 100%;
-    height: 100vh;
+    height: 100%;
     background: var(--white-light);
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-gap: 25px;
+    padding-bottom: 12px;
 }
 
 .dash-panel{
@@ -276,7 +277,9 @@ table{
     border-radius: 10px;
     padding: 25px;
     overflow: auto;
+    scrollbar-width: thin;
 }
+
 
 /*  -------------------------------------------------------------
   BUTTONS
@@ -389,15 +392,15 @@ table{
 .dash-panel-table tr td{
     font-size: 12px;
     font-weight: 100;
-    padding: 10px 0;
+    padding: 20px 0;
     color: var(--dark-00);
-    border-bottom: 1px solid var(--gray-10);
+    border-bottom: 1px solid var(--black-alpha-05);
 }
 
 .btn-report-edition{
     padding: 3px;
     font-size: 12px;
-    width: fit-content;
+    width: 25px;
     color: var(--gray-50);
     cursor: pointer;
 }
@@ -485,6 +488,32 @@ table{
 }
 
 /*  -------------------------------------------------------------
+  SCROLL BAR
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+::-webkit-scrollbar{
+    width: 5px;
+}
+
+::-webkit-scrollbar-track{
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb{
+    background-color: var(--gray-20);
+    background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background-color: var(--gray-30);
+}
+
+::-webkit-scrollbar-thumb:hover ::-webkit-scrollbar{
+    width: 10px;
+}
+
+
+/*  -------------------------------------------------------------
   RESPONSIVE DESIGN
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
@@ -497,20 +526,17 @@ table{
         width: 25px;
         height: 25px;
     }
-    /*.dash-panel-header-legend-item{
-        flex-direction: column;
-        border-radius: 5px;
-    }*/
     .dash-panel-header-legend-item span:nth-child(2){
         display: none;
     }
+    .dash-panel-header-legend-item{
+        width: 40px;
+    }
 }
 
-@media screen and (max-width: 1203px){
-    .dash-panel-buttons{
-        flex-direction: column;
-    }
-    .card-header-legend span span{
+@media screen and (max-width: 1220px){
+    .card-header-legend span span,
+    .panel_date_range{
         display: none;
     }
 }
@@ -550,8 +576,8 @@ table{
     .dash-panel-content{
         max-height: 100%;
     }
-    .dash-panel-table tr td{
-        padding: 20px 0
+    .panel_date_range{
+        display: inline-block;
     }
 }
 
