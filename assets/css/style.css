@@ -452,7 +452,19 @@ table{
 }
 
 .card-content ul li{
-    display: inline-block;
+    width: auto;
+}
+
+.card-content .preview{
+    width: 100%;
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-content .preview img{
+    width: 100%;
 }
 
 .card-footer{
@@ -468,6 +480,9 @@ table{
 
 .pliego-pages{
     padding: 0;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-gap: 5px 0;
 }
 
 .pliego-pages li p{
@@ -559,7 +574,7 @@ table{
     }
 }
 
-@media screen and (max-width: 990px){
+@media screen and (max-width: 1000px){
     .dash-panel:nth-child(1),
     .dash-panel:nth-child(2),
     .dash-panel:nth-child(3){
