@@ -1,84 +1,6 @@
 /*  -------------------------------------------------------------
-  DEFAULT
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-html{
-    box-sizing: border-box;
-    font-family: 'Poppins-Regular', sans-serif;
-    font-size: 62.5%;
-}
-
-*,
-*::after,
-*::before {
-    box-sizing: inherit;
-    font-family: inherit;
-    box-sizing: inherit;
-    margin: 0;
-    padding: 0;
-}
-
-ul, ol{
-    list-style: none;
-}
-
-a{
-    text-decoration: none;
-    color: inherit;
-}
-
-table{
-    border-collapse: collapse;
-}
-
-/*  -------------------------------------------------------------
-  Variables
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-:root {
-    --dark-00: #495057;
-    --dark-10: #343a40;
-    --dark-20: #212529;
-    --dark-30: #000000;
-    --gray-00: #eeeeee;
-    --gray-10: #e9ecef;
-    --gray-20: #dee2e6;
-    --gray-30: #ced4da; 
-    --gray-40: #adb5bd;
-    --gray-50: #6c757d;
-    --shadow-1: rgba(0, 0, 0, 0.1);
-    --shadow-2: rgba(0, 0, 0, 0.2);
-    --shadow-3: rgba(0, 0, 0, 0.3);
-    --shadow-5: rgba(0, 0, 0, 0.5);
-    --shadow-8: rgba(0, 0, 0, 0.8);
-    --black-alpha-05: rgba(0, 0, 0, 0.05);
-    --black-alpha-10: rgba(0, 0, 0, 0.1);
-    --black-alpha-15: rgba(0, 0, 0, 0.15);
-    --black-alpha-20: rgba(0, 0, 0, 0.2);
-    --black-alpha-30: rgba(0, 0, 0, 0.3);
-    --black-alpha-40: rgba(0, 0, 0, 0.4);
-    --black-alpha-50: rgba(0, 0, 0, 0.5);
-    --black-alpha-60: rgba(0, 0, 0, 0.6);
-    --black-alpha-80: rgba(0, 0, 0, 0.8);
-    --white-alpha-05: rgba(255, 255, 255, 0.05);
-    --white-alpha-10: rgba(255, 255, 255, 0.1);
-    --white-alpha-20: rgba(255, 255, 255, 0.2);
-    --white-alpha-30: rgba(255, 255, 255, 0.3);
-    --white-alpha-40: rgba(255, 255, 255, 0.4);
-    --white-alpha-50: rgba(255, 255, 255, 0.5);
-    --white-alpha-60: rgba(255, 255, 255, 0.6);
-    --white-alpha-80: rgba(255, 255, 255, 0.8);
-    --white-light: #edf2fb;
-    --white-00: #ffffff;
-    --card-yellow: ##fcf6bd;
-    --card-green: #d0f4de;
-    --card-red: ##f9bec7;
-    --card-gary: ##dee2e6;
-    --red-00: #ff5e5b;
-    --green-10: #00A400;
-}
-
-/*  -------------------------------------------------------------
-  HEADER
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+HEADER
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 .header{
     width: 100%;
@@ -86,21 +8,48 @@ table{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px;
+    padding: 0 50px;
     height: 50px;
     box-shadow: 0 2px 5px var(--shadow-2);
     position: fixed;
     z-index: 2;
 }
 
-.dash-sheets, .dash-pages, .navbar, .user-config, .table-head, .modals, .panel_date_range{
-    display: none;
-}
 /*  Menu
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.menu{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu nav ul li{
+    display: inline-flex;
+    height: 50px;
+    align-items: flex-end;
+}
+
+.menu_item{
+    color: var(--gray-10);
+    font-size: 14px;
+    padding: 0 15px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    border-radius: 5px 5px 0px 0px;
+    background: var(--dark-10);
+}
+
+.menu_item i{
+    margin-right: 5px;
+}
 
 /*  Logo
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.logo{
+    margin-right: 50px;
+}
+
 .logo a{
     display: flex;
     align-items: center;
@@ -122,7 +71,20 @@ table{
 }
 
 /*  User account
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.account{
+    display: flex;
+    align-items: center;
+    justify-self: center;
+}
+
+.user-config{
+    width: 30px;
+    height: 60px;
+    display: flex;
+    margin: 0 5px;
+}
+
 .user-options{
     height: 33px;
     width: 33px;
@@ -139,16 +101,19 @@ table{
     font-size: 1.6rem;
 }
 
+.menu-phone{
+    margin: 0 20px;
+    display: none;
+}
+
 /*  User Options
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 .wraper-options{
     position: absolute;
     top: 60px;
-    max-height: calc(100vh - 50px);
-    overflow: auto;
     background: var(--dark-20);
     width: 300px;
-    right: 10px;
+    right: 45px;
     border-radius: 5px;
     padding: 20px;
     color: var(--gray-40);
@@ -199,15 +164,15 @@ table{
 }
 
 /*  -------------------------------------------------------------
-  DASHBOARD
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+DASHBOARD
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 .dashboard{
     width: 100%;
-    height: 100vh;
+    height: 100%;
     background: var(--white-light);
     display: grid;
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     grid-gap: 25px;
     padding-bottom: 12px;
 }
@@ -217,44 +182,45 @@ table{
     padding-top: 50px;
 }
 
+.dash-panel:nth-child(1){
+    grid-column: 1/3;
+}
+
 .dash-panel-header{
     padding: 25px;
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    flex-direction: column;
 }
 
 .dash-panel-header-title{
-    margin: 0;
-    margin-bottom: 10px;
     font-size: 25px;
+    margin: 0;
     font-weight: 600;
     color: var(--dark-10);
 }
 
 .dash-panel-content{
-    padding: 20px;
-    max-height: calc(100vh - 230px);
+    background: var(--white-00);
+    max-height: calc(100vh - 150px);
     border-radius: 10px;
-    overflow-x: hidden;
-    overflow-y: auto;
+    padding: 25px;
+    overflow: auto;
     scrollbar-width: thin;
 }
 
 .dash-panel-content-table{
-    overflow: hidden
+    overflow: hidden;
 }
 
 .panel_date_range{
+    margin-right: 20px;
     font-size: 1rem;
     color: var(--dark-10);
-    order: 3;
 }
 
 /*  -------------------------------------------------------------
-  BUTTONS
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+BUTTONS
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 .btn{
     padding: 8px 16px;
@@ -269,22 +235,11 @@ table{
 }
 
 /*  Legend
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-.dash-panel-header-buttons{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.dash-panel-header-buttons .btn{
-    margin: 0 5px;
-}
-
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 .dash-panel-header-legend{
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
 }
 
 .dash-panel-header-legend-item{
@@ -309,19 +264,6 @@ table{
     font-size: 18px;
 }
 
-/*  -------------------------------------------------------------
-  BADGES
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-
-.badge{
-    background: var(--gray-20);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0px 10px;
-    border-radius: 100px;
-}
-
 .badge-number{
     position: absolute;
     top: -10px;
@@ -332,8 +274,21 @@ table{
 }
 
 /*  -------------------------------------------------------------
-  COLORS
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+BADGES
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+.badge{
+    background: var(--gray-20);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0px 10px;
+    border-radius: 100px;
+}
+
+/*  -------------------------------------------------------------
+COLORS
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 .bg-red{
     background: var(--red-00);
@@ -352,15 +307,29 @@ table{
 }
 
 /*  -------------------------------------------------------------
-  PANEL EDITIONS
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+PANEL EDITIONS
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+.table-head{
+    width: 100%;
+    border-bottom: 1px dashed var(--gray-10);
+}
+
+.table-head tr th{
+    font-weight: 100;
+    font-size: 14px;
+    padding: 10px 0;
+    text-align: left;
+}
+
 .dash-panel-table{
     overflow: auto;
     max-height: calc(100vh - 260px);
+    background: #fff;
 }
 
 .dash-panel-table img{
-    width: 2.4rem
+    width: 24px
 }
 
 .dash-panel-table table{
@@ -368,19 +337,11 @@ table{
 }
 
 .dash-panel-table tr td{
-    font-size: 1.2rem;
+    font-size: 12px;
     font-weight: 100;
+    padding: 20px 0;
     color: var(--dark-00);
-    text-align: center;
-}
-
-.dash-panel-table tr{
-    display: block;
-    background: var(--white-00);
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 15px;
-    box-shadow: 0 3px 7px var(--shadow-1);
+    border-bottom: 1px solid var(--black-alpha-05);
 }
 
 .dash-panel-content-page{
@@ -390,23 +351,42 @@ table{
     flex-wrap: wrap;
 }
 
+.btn-report-edition{
+    padding: 3px;
+    font-size: 12px;
+    width: 25px;
+    height: 25px;
+    color: var(--gray-50);
+    cursor: pointer;
+}
+
 /*  -------------------------------------------------------------
-  PANEL PLIEGOS
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+PANEL PLIEGOS
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 /*  Cards
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 .card{
     position: relative;
     width: 100%;
-    max-width: 350px;
-    background: var(--white-00);
+    background: inherit;
     border-radius: 10px;
-    padding: 15px;
+    padding: 20px;
     color: var(--dark-00);
     margin-bottom: 25px;
     border: 1px solid var(--black-alpha-20);
     box-shadow: 0px 16px 38px var(--shadow-1);
+}
+
+.card p{
+    margin: 0;
+}
+
+.card-header{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-direction: column;
 }
 
 .card-header-title{
@@ -523,8 +503,8 @@ table{
 }
 
 /*  -------------------------------------------------------------
-  SCROLL BAR
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+SCROLL BAR
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 ::-webkit-scrollbar{
     width: 5px;
@@ -548,11 +528,11 @@ table{
 }
 
 /*  -------------------------------------------------------------
-  MODALS
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+MODALS
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-  /*  Overlay
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+/*  Overlay
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 .modals{
     position: fixed;
@@ -561,7 +541,7 @@ table{
     width: 100vw;
     height: 100vh;
     background: var(--black-alpha-30);
-    z-index: 4;
+    z-index: -1;
 }
 
 .modal{
@@ -569,27 +549,27 @@ table{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 300px;
+    width: 600px;
     height: 500px;
     background: var(--white-00);
-    border: 1px solid var(--black-alpha-40);
+    border: 1px solid var(--black-alpha-60);
     border-radius: 10px;
     box-shadow: 0 28px 42px var(--shadow-3);
     padding: 20px;
 }
 
 .modal-header{
+    padding: 0 20px;
     width: 100%;
-    height: 40px;
-    border-bottom: 1px solid var(--black-alpha-05);
+    height: 60px;
+    border-bottom: 1px solid var(--black-alpha-15);
 }
 
 .modal-footer{
     position: absolute;
-    width: 100%;
-    height: 40px;
-    left: 0;
     bottom: 0;
+    left: 0;
     padding: 0 20px;
+    width: 100%;
     border-top: 1px solid var(--black-alpha-15);
 }

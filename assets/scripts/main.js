@@ -22,7 +22,7 @@ $(document).ready(function(){
         wrapper_options.removeClass("show")
     });
 
-    if(screen.width < 990){
+    if(screen.width < 768){
         $(".dash-panel-table tr td").click(function(){
             console.log(this);
             $(".dash-editions").hide();
@@ -31,6 +31,22 @@ $(document).ready(function(){
 
         $(".card").click(function(){
             $(".dash-editions").hide();
+            $(".dash-sheets").hide();
+            $(".dash-pages").show();
+        });
+    }
+
+    if(screen.width <= 990){
+        $(".table-sheets").hide();
+        $(".table-progress").hide();
+        $(".table-report").hide();
+
+        $(".dash-panel-table tr td").click(function(){
+            console.log(this);
+            $(".dash-sheets").show();
+        });
+
+        $(".card").click(function(){
             $(".dash-sheets").hide();
             $(".dash-pages").show();
         });
