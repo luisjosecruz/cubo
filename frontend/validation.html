@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CUBO DEV</title>
+    <link rel="icon" href="../public/img/favicon.png">
+    <script src="https://static.elmundo.sv/cognito-aws/aws-sdk-2.754.0.min.js"></script>
+	<script src="assets/scripts/jquery-3.5.1.min.js"></script>
+	<script src="assets/scripts/cognito/aws-cognito-sdk.min.js"></script>
+	<script src="assets/scripts/cognito/amazon-cognito-identity.min.js"></script>
+	<script src="assets/scripts/cognito/conf_app.js"></script>
+	<script src="assets/scripts/cognito/config.js"></script>
+	<script>
+
+	const validation = urlEndpoint+"validation.html";
+	const url_token = 'https://demdrive.auth.us-west-2.amazoncognito.com/oauth2/token';
+
+	function getParams (url) {
+	    var params = {};
+	    var parser = document.createElement('a');
+	    parser.href = url;
+	    var query = parser.search.substring(1);
+	    var vars = query.split('&');
+	    for (var i = 0; i < vars.length; i++) {
+	        var pair = vars[i].split('=');
+	        params[pair[0]] = decodeURIComponent(pair[1]);
+	    }
+	    return params;
+	};
+
+	function parseJwt(token) {
+	    console.log("config");
+	    try {
+	        // Get Token Header
+	        const base64HeaderUrl = token.split('.')[0];
+	        const base64Header = base64HeaderUrl.replace('-', '+').replace('_', '/');
+	        const headerData = JSON.parse(window.atob(base64Header));
+
+	        // Get Token payload and date's
+	        const base64Url = token.split('.')[1];
+	        const base64 = base64Url.replace('-', '+').replace('_', '/');
+	        const dataJWT = JSON.parse(window.atob(base64));
+	        dataJWT.header = headerData;
+
+	        // TODO: add expiration at check ...
+	        return dataJWT;
+	    } catch (err) {
+	        return false;
+	    }
+	}
+
+	// Get parameters from a URL string
+	var str = window.location.href;
+	// Rreplace # by ?
+	var url_other = str.replace('#', '?');
+	var url_clean = url_other.replace('?_', '');
+	//alert(url_clean);
+	var objectCode = getParams(url_clean);
+	var code = (objectCode.code) ? objectCode.code : "";
+
+	if (code.trim().length > 0) {
+
+	    if (localStorage.getItem('aws.cognito.'+clientId+'.access_token') != null) {
+	        var cognito_access_token  = localStorage.getItem('aws.cognito.'+clientId+'.access_token');
+	        var cognito_id_token      = localStorage.getItem('aws.cognito.'+clientId+'.id_token');
+	        var cognito_refresh_token = localStorage.getItem('aws.cognito.'+clientId+'.refresh_token');
+	    }else{
+	    	console.log(clientId);
+	        var settings = {
+	            "async": false,
+	            "crossDomain": true,
+	            "url": url_token,
+	            "method": "POST",
+	            "headers": {
+		            "content-type": "application/x-www-form-urlencoded; charset=utf-8",
+		            "cache-control": "no-cache"
+	            },
+	            "data": {
+		            "grant_type": "authorization_code",
+		            "client_id": clientId,
+		            "code": code,
+		            "redirect_uri": validation
+	            }
+	        }
+	        console.log(settings);
+	        $.ajax(settings).done(function (response) {
+	            console.log('Savign JWT');
+	            localStorage.setItem('aws.cognito.'+clientId+'.id_token', response.id_token);
+	            localStorage.setItem('aws.cognito.'+clientId+'.refresh_token', response.refresh_token);
+	            localStorage.setItem('aws.cognito.'+clientId+'.access_token', response.access_token);
+
+	            //Obtenemos el usuario & IDP
+	            var usrIDP   = parseJwt(response.access_token);
+	            var IDP      = parseJwt(response.id_token);
+	            var usernameIDP = usrIDP.username;
+
+
+	            console.log(IDP);
+	            console.log("----------------------------------------------");
+	            console.log(usrIDP);
+	            localStorage.setItem("aws.cognito."+clientId+'.user_data', JSON.stringify(IDP));
+	            
+	            if(IDP.identities != undefined){
+	                var IdentityPro = IDP.identities[0].providerName;    
+	            }else{
+	                var IdentityPro = 'cognito';
+	            }
+	            
+	            //Saving username
+	            localStorage.setItem('aws.cognito.'+clientId+'.username', usernameIDP);
+	            //Saving IDP
+	            switch(IdentityPro){
+	                case 'Facebook':
+	                    localStorage.setItem('aws.cognito.'+clientId+'.IdentityProvider', IdentityPro);
+	                break;
+	                case 'gmail':
+	                    localStorage.setItem('aws.cognito.'+clientId+'.IdentityProvider', IdentityPro);
+	                break;
+	                default:
+	                    localStorage.setItem('aws.cognito.'+clientId+'.IdentityProvider', IdentityPro);
+	                break;
+	            }
+	            //window.location.reload();
+	            //window.location.href = 'index.html';
+	            getUser(response.access_token);
+
+	        });
+	    }
+	}else{
+	    console.log("CODE NON EXIST");
+	}
+	var user_data = JSON.parse(localStorage.getItem("aws.cognito."+clientId+'.user_data'));
+	//console.log(user_data);
+	var zone = (!("zoneinfo" in user_data)) ? 0 : user_data.zoneinfo ;
+	//console.log(zone);
+
+	</script>
+</head>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap');
+body{
+	margin: 0;
+	padding: 0;
+	font-family: 'Poppins', sans-serif;
+}
+.cube{
+	transform-style: preserve-3d;
+	width: 200px;
+	height: 200px;
+	margin: auto;
+	position: relative;
+	animation: loop 10s linear infinite;
+}
+.cube img{
+	position: absolute;
+	opacity: 0.8;
+	width: inherit;
+}
+.cube img:nth-child(1){
+	transform: rotateY(0deg) translateZ(100px);
+}
+.cube img:nth-child(2){
+	transform: rotateY(90deg) translateZ(100px);
+}
+.cube img:nth-child(3){
+	transform: rotateY(180deg) translateZ(100px);
+}
+.cube img:nth-child(4){
+	transform: rotateY(-90deg) translateZ(100px);
+}
+.cube img:nth-child(5){
+	transform: rotateX(90deg) translateZ(100px);
+}
+.cube img:nth-child(6){
+	transform: rotateX(-90deg) translateZ(100px);
+}
+@keyframes loop{
+	from{
+		transform: rotateX(0deg) rotateY(0deg);
+	}
+	to{
+		transform: rotateX(360deg) rotateY(360deg);
+	}
+}
+.container{
+	width: 100%;
+	height: 100vh;
+	background: antiquewhite;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.content_cube, .container_text{
+	background:#fff;
+	width: 50%;
+	height: 100%;
+	display: flex;
+}
+.container_text{
+	background: #f6b911;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	padding: 0 50px;
+	text-align: center;
+}
+.container_text h1{
+	font-size: 40px;
+	margin: 10px 10px 5px;
+}
+
+</style>
+<body>
+	<div class="container">
+		
+	</div>
+</body>
+</html>
+
+
+<script>
+
+    let htmlVal = `
+            <div class="content_cube">
+                <div class="cube">
+                    <img src="login/dist/img/1.jpg">
+                    <img src="login/dist/img/2.jpg">
+                    <img src="login/dist/img/3.jpg">
+                    <img src="login/dist/img/4.jpg">
+                    <img src="login/dist/img/5.jpg">
+                    <img src="login/dist/img/6.jpg">
+                </div>
+            </div>
+            <div class="container_text">
+                <h1>Estamos validando tu cuenta... </h1>
+                <p>Si tu cuenta es correcta, te notificaremos para que puedas acceder...</p>
+                <br><br>
+                <p class="counter_redirect">Redirigiendo al panel de Inicio de Sesión en... <span>5</span></p>
+            </div>
+    `;
+    if(zone == 0){
+        $(".container").html(htmlVal);
+
+        //funcion redirigir
+        var start = 5 - 1;
+        var end = 0;
+        setInterval(function(){
+        	if (start != end) {
+	        	$(".counter_redirect span").html(start);
+	        	start--;
+        	}else{
+        		//borrar localStorate
+        		removeLocalStorage();
+        	}
+        }, 1000);
+    }else{
+		location.href = urlEndpoint;
+    }
+
+</script>
