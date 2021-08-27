@@ -1,42 +1,44 @@
-<link rel="stylesheet" href="assets/css/login.css">
+    <link rel="stylesheet" href="assets/css/login.css">
 
-<section class="dashboard">
-    <div class="login">
-        <div class="logo login-logo">
-            <a href="#">
-                <img src="https://gdurl.com/MoA0">
-                <span>cubo<sub>dev</sub></span>
-            </a>
-        </div>
-        <div class="login-form">
-            <form id="loginForm">
-                <div class="form">
-                    <div class="form-group">
-                        <label for="email">
-                            <input class="form-input" type="text" id="email" autocomplete="off" placeholder="Correo Electrónico">
-                        </label>
+    <section class="dashboard">
+        <div class="login">
+            <div class="logo login-logo">
+                <a href="#">
+                    <img src="https://gdurl.com/MoA0">
+                    <span>cubo<sub>dev</sub></span>
+                </a>
+            </div>
+            <div class="login-form">
+                <form id="loginForm">
+                    <div class="form">
+                        <div class="form-group">
+                            <label for="emailInput">
+                                <input class="form-input" type="text" id="emailInput" name="username" autocomplete="off" placeholder="Correo Electrónico">
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="passwordInput">
+                                <input class="form-input" type="password" id="passwordInput" name="password" autocomplete="off" placeholder="Contarseña">
+                            </label>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="password">
-                            <input class="form-input" type="password" id="password" autocomplete="off" placeholder="Contarseña">
-                        </label>
+
+                    <div class="form-btns">
+                        <button class="btn c-green"><i class="icon-user-o"></i><span>Iniciar Sesión</span></button>
+                        <button onclick="googleSignUpButton()" class="btn"><i class="icon-user-circle"></i><span>Continuar con @elmundo</span></button>
                     </div>
-                </div>
-
-                <div class="form-btns">
-                    <button class="btn c-green"><i class="icon-user-o"></i><span>Iniciar Sesión</span></button>
-                    <button onclick="googleSignUpButton()" class="btn"><i class="icon-user-circle"></i><span>Continuar con @elmundo</span></button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- <script src="https://static.elmundo.sv/cognito-aws/aws-sdk-2.754.0.min.js"></script> -->
-<script src="assets/scripts/cognito/aws-sdk-2.754.0.min.js"></script>
-<script src="assets/scripts/cognito/aws-cognito-sdk.min.js"></script>
-<script src="assets/scripts/cognito/amazon-cognito-identity.min.js"></script>
+    <script src="assets/scripts/jquery-3.5.1.min.js"></script>
+    <script src="assets/scripts/cognito/aws-sdk-2.754.0.min.js"></script>
+    <script src="assets/scripts/cognito/aws-cognito-sdk.min.js"></script>
+    <script src="assets/scripts/cognito/amazon-cognito-identity.min.js"></script>
 
-<script src="assets/scripts/cognito/conf_app.js"></script>
-<script src="assets/scripts/cognito/login.js"></script>
-
+    <script src="assets/scripts/utils.js"></script>
+    <script src="assets/scripts/loast.js"></script>
+    <script src="assets/scripts/cognito/login.js"></script>
+</body>
+</html>

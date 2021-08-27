@@ -1,63 +1,40 @@
-// demo 
-const urlEndpoint = "http://localhost:3000/"; 
-
-// production 
-//const urlEndpoint = "https://cubo.elmundo.sv/"; 
-
-var cognitoUser;
-//var idToken;
-var userPool;
+let cognitoUser,
+    userPool,
+    commentFunction, 
+	searhFunction,
+	fname,
+	lname,
+	urlprofile;
 
 var poolData = { 
-    UserPoolId : userPoolId,
-    ClientId : clientId
+    UserPoolId : config('userPoolId'),
+    ClientId : config('clientId')
 };
 
 /*
 + Determinamos si hay IDP ? obtenemos custom access_token : obtenemos por LastAuthUser.
 + Enviamos cognito access token a la funcion getUser
 */
-var IdentityProviderUI    = localStorage.getItem('aws.cognito.'+clientId+'.IdentityProvider');
+var IdentityProviderUI    = localStorage.getItem('aws.cognito.'+config('clientId')+'.IdentityProvider');
 
 if(IdentityProviderUI === 'Facebook' || IdentityProviderUI === 'Google'){
-    var cognito_access_token  = localStorage.getItem('aws.cognito.'+clientId+'.access_token');
-    var cognito_id_token      = localStorage.getItem('aws.cognito.'+clientId+'.id_token');
-    var cognito_refresh_token = localStorage.getItem('aws.cognito.'+clientId+'.refresh_token');
+    var cognito_access_token  = localStorage.getItem('aws.cognito.'+config('clientId')+'.access_token');
+    var cognito_id_token      = localStorage.getItem('aws.cognito.'+config('clientId')+'.id_token');
+    var cognito_refresh_token = localStorage.getItem('aws.cognito.'+config('clientId')+'.refresh_token');
     //var cognito_devicekey     = localStorage.getItem('aws.cognito.'+clientId+'.deviceKey');
 
     $("#currentPassword").attr('disabled', true);
     $("#newPassword").attr('disabled', true);
 }else{
-    var LastAuthUser = localStorage.getItem('CognitoIdentityServiceProvider.'+clientId+'.LastAuthUser');
+    var LastAuthUser = localStorage.getItem('CognitoIdentityServiceProvider.'+config('clientId')+'.LastAuthUser');
     //console.log('LastAuthUser: ' + LastAuthUser);
-    var cognito_access_token  = localStorage.getItem('CognitoIdentityServiceProvider.'+clientId+'.'+LastAuthUser+'.accessToken');
-    var cognito_id_token      = localStorage.getItem('CognitoIdentityServiceProvider.'+clientId+'.'+LastAuthUser+'.idToken');
-    var cognito_refresh_token = localStorage.getItem('CognitoIdentityServiceProvider.'+clientId+'.'+LastAuthUser+'.refreshToken');
-    var cognito_devicekey     = localStorage.getItem('CognitoIdentityServiceProvider.'+clientId+'.'+LastAuthUser+'.deviceKey');
+    var cognito_access_token  = localStorage.getItem('CognitoIdentityServiceProvider.'+config('clientId')+'.'+LastAuthUser+'.accessToken');
+    var cognito_id_token      = localStorage.getItem('CognitoIdentityServiceProvider.'+config('clientId')+'.'+LastAuthUser+'.idToken');
+    var cognito_refresh_token = localStorage.getItem('CognitoIdentityServiceProvider.'+config('clientId')+'.'+LastAuthUser+'.refreshToken');
+    var cognito_devicekey     = localStorage.getItem('CognitoIdentityServiceProvider.'+config('clientId')+'.'+LastAuthUser+'.deviceKey');
 }
 
 cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider({region: 'us-west-2'});
-
-//Function to Decode returned Code
-function parseJwt(token) {
-    try {
-        // Get Token Header
-        const base64HeaderUrl = token.split('.')[0];
-        const base64Header = base64HeaderUrl.replace('-', '+').replace('_', '/');
-        const headerData = JSON.parse(window.atob(base64Header));
-
-        // Get Token payload and date's
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace('-', '+').replace('_', '/');
-        const dataJWT = JSON.parse(window.atob(base64));
-        dataJWT.header = headerData;
-
-        // TODO: add expiration at check ...
-        return dataJWT;
-    } catch (err) {
-        return false;
-    }
-}
 
 //Funcion para regenerar tokens temporales
 function refreshToken(refresh_token){
@@ -67,7 +44,7 @@ function refreshToken(refresh_token){
 
         var params = {
           AuthFlow: 'REFRESH_TOKEN', /* required */
-          ClientId: clientId, /* required */
+          ClientId: config('clientId'), /* required */
           AuthParameters: {
             'REFRESH_TOKEN': refresh_token,
             "DEVICE_KEY" : cognito_devicekey
@@ -82,15 +59,14 @@ function refreshToken(refresh_token){
               }
           }else{
                 //console.log('Data from refreshToken>>> ');
-
                 if(IdentityProviderUI === 'Facebook' || IdentityProviderUI === 'Google'){
                     //console.log('Set as custom Id & Access Token');
-                    localStorage.setItem('aws.cognito.'+clientId+'.id_token', data.AuthenticationResult.IdToken);
-                    localStorage.setItem('aws.cognito.'+clientId+'.access_token', data.AuthenticationResult.AccessToken);
+                    localStorage.setItem('aws.cognito.'+config('clientId')+'.id_token', data.AuthenticationResult.IdToken);
+                    localStorage.setItem('aws.cognito.'+config('clientId')+'.access_token', data.AuthenticationResult.AccessToken);
                 }else{
                     //console.log('Set as SDK tokens format');
-                    localStorage.setItem('CognitoIdentityServiceProvider.'+clientId+'.'+LastAuthUser+'.idToken', data.AuthenticationResult.IdToken);
-                    localStorage.setItem('CognitoIdentityServiceProvider.'+clientId+'.'+LastAuthUser+'.accessToken', data.AuthenticationResult.AccessToken);
+                    localStorage.setItem('CognitoIdentityServiceProvider.'+config('clientId')+'.'+LastAuthUser+'.idToken', data.AuthenticationResult.IdToken);
+                    localStorage.setItem('CognitoIdentityServiceProvider.'+config('clientId')+'.'+LastAuthUser+'.accessToken', data.AuthenticationResult.AccessToken);
                 }              
 
                 //console.log('Hemos regenerado Access and Id Token, RefreshToken works!');
@@ -98,27 +74,24 @@ function refreshToken(refresh_token){
             }
         });
     }else{
-        window.location.href = urlEndpoint+'login/login.html'; 
+        window.location.href = config('url')+"/login"; 
     }
 }
 
 function removeLocalStorage(){
-    //console.log('Borramos todo, para un nuevo inicio de sesion');
-    localStorage.removeItem('aws.cognito.'+clientId+'.access_token');
-    localStorage.removeItem('aws.cognito.'+clientId+'.id_token');
-    localStorage.removeItem('aws.cognito.'+clientId+'.refresh_token');
-    localStorage.removeItem('aws.cognito.'+clientId+'.IdentityProvider');
-    localStorage.removeItem('aws.cognito.'+clientId+'.username');
-    localStorage.removeItem('aws.cognito.'+clientId+'.redirect_uri');
-    //console.log('Realizando procesos y redireccionando a HostedUI');
+    localStorage.removeItem('aws.cognito.'+config('clientId')+'.access_token');
+    localStorage.removeItem('aws.cognito.'+config('clientId')+'.id_token');
+    localStorage.removeItem('aws.cognito.'+config('clientId')+'.refresh_token');
+    localStorage.removeItem('aws.cognito.'+config('clientId')+'.IdentityProvider');
+    localStorage.removeItem('aws.cognito.'+config('clientId')+'.username');
+    localStorage.removeItem('aws.cognito.'+config('clientId')+'.redirect_uri');
 
-    localStorage.setItem('CognitoIdentityServiceProvider.'+clientId+'.'+LastAuthUser+'.accessToken', '');
+    localStorage.setItem('CognitoIdentityServiceProvider.'+config('clientId')+'.'+LastAuthUser+'.accessToken', '');
     
     setTimeout(function(){
-        window.location.href = urlEndpoint+'login/login.html'; 
-    }, 1500);    
+        window.location.href = config('url')+"/login";
+    }, 500);    
 }
-
 
 //function for validating json string
 function checkJSON(text){
@@ -147,26 +120,17 @@ function getUser(cognito_access_token){
 
         cognitoidentityserviceprovider.getUser(params, function(err, data) {
             if (err){
-                //console.log(err);
-                //console.log(err.message);
-                //console.log('Session expire, make a new request AWS');
                 if(err.message === 'Access Token has expired'){
                     refreshToken(cognito_refresh_token);
                 }
-                $("#userProfile").html ('');
+
                 if(err.message === 'Missing required key \'AccessToken\' in params'){
                     //console.log('Sesion NO iniciada');
-                    //$("#userProfile").append('<div><img src="https://admin.elmundo.sv/web2020/wp-content/themes/webdem2020/images/account.png" width="28"  height="28" alt="">');
-                    //$("#userProfile").append('<button class="btn btn-warning btn-sm" id="closeSession" onclick="" >Iniciar sesion</button></div>');
                 } 
-
                 if(err.message === 'User does not exist.'){
                     removeLocalStorage();
                 }            
-                
             }else{
-
-                //console.log('Get temporary credentials by:');
                 //Getting IdentityCredentials
                 getCognitoIdentityCredentials(cognito_id_token);
                 
@@ -175,42 +139,16 @@ function getUser(cognito_access_token){
 
                 const given_name = attrU.find(given_name => given_name.Name === 'given_name');
                 const family_name = attrU.find(family_name => family_name.Name === 'family_name');
-                //console.log('Antes de picture var');
                 const picture = attrU.find(picture => picture.Name === 'picture');
-                //console.log('Despues');
-
                 var LetterName = given_name.Value.substring(0,1);
-
                 const type_user = attrU.find(zoneinfo => zoneinfo.Name === 'zoneinfo');
                 const correo = attrU.find(email => email.Name === 'email');
-
-                //console.log(picture.Value);
-                //Check is picture Value exist
-                if(picture){
-                    //Validating IDP
-                    if(IdentityProviderUI === 'Facebook'){
-                        if(checkJSON(picture.Value)){
-                            var jsonString = JSON.parse(picture.Value);
-                            var imgURL     = jsonString.data['url'];
-                            var avatarProfile =  '<img src="'+imgURL+'" widht="28" height="28" style="border-radius:50%;" id="editAccount" onclick="showUserActions()" />';
-                        }else{
-                            var imgURL     = picture.Value;
-                            var avatarProfile =  '<img src="'+imgURL+'" widht="28" height="28" style="border-radius:50%;" id="editAccount" onclick="showUserActions()" />';
-                        }
-                    }else{
-                        var imgURL        = picture.Value;
-                        var avatarProfile =  '<img src="'+imgURL+'" widht="28" height="28" style="border-radius:50%;" id="editAccount" onclick="showUserActions()" />';
-                    }
-                }else{
-                    var avatarProfile =  '<img src="https://static.elmundo.sv/letters_cognito/'+LetterName+'.svg" widht="28" height="28" style="border-radius:50%;" id="editAccount" onclick="showUserActions()"/>';
-                }
 
                 //Disable actions
                 if(IdentityProviderUI === 'Facebook' || IdentityProviderUI === 'Google'){
                     $("#updatepasswd").prop('disabled', true);
                     $("#currentPassword").prop('disabled', true);
                     $("#newPassword").prop('disabled', true);
-                }else{
                 }
 
                 commentFunction = true;
@@ -218,28 +156,13 @@ function getUser(cognito_access_token){
                 fname           = given_name.Value;
                 lname           = family_name.Value;
                 urlprofile      = imgURL;
-                typeUser        = type_user.Value;
-
-                if(given_name.Value != undefined){
-                    //$("#userProfile").html('<span class="loginspan"><span onclick="showUserActions()">Hola, <br>' + fname + '</span> ' +avatarProfile+' <svg id="arrowDown" onclick="showUserActions()" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg> <svg onclick="showUserActions()" id="arrowUp" style="display:none;" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-up-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/></svg></span>');
-                    $("#userProfile").html('<div class="account"><p style="color: #fff"></p><p> ' +avatarProfile+'</p></div>');
-                    //$("#userProfile").append('<div id="userActions" style="display:none;padding-top: 12px;"><ul><li><a href="https://admin.elmundo.sv/cognito/profile.html">Mi cuenta</a></li><li><a href="#" onclick="removeLocalStorage()">Cerrar sesión</a></li>');
-                    $(".user-config-header h4").html(fname+" "+lname+" <br><small>"+correo.Value+"</small><input id='user_id' type='hidden' value='"+correo.Value+"'><input id='typeUser' type='hidden' value='"+typeUser+"'>");
-                }else{
-                    //$("#userProfile").append('<div>Bienvenido ');
-                }                
+                typeUser        = type_user.Value;            
             }
         });
     }else{
-        //$("#userProfile").html ('');    
-        $("#userProfile").html('<div><img src="https://admin.elmundo.sv/web2020/wp-content/themes/webdem2020/images/account.png" id="closeSession" width="28"  height="28" alt=""></div>');
-        //$("#userProfile").append('<button class="btn btn-warning btn-sm"  onclick="" >Iniciar sesion</button>');
-        window.location.href = urlEndpoint+'login/login.html'; 
+        window.location.href = config('url')+"/login";
     }
-
-    
 }
-
 
 //Funcion para actualizar profile
 function getProfile(cognito_access_token){
@@ -303,7 +226,6 @@ function getProfile(cognito_access_token){
                     $("#currentPassword").prop('disabled', true);
                     $("#newPassword").prop('disabled', true);
                     //="" data-placement="top" =""
-                }else{
                 }
 
                 if(given_name.Value != undefined){
@@ -327,18 +249,12 @@ function getProfile(cognito_access_token){
                     }
                     $("#photoprofile").html(avatarProfile);
                 }
-                
             }
-            
         });
-
-        
-
     }else{
         alert('Usted no tiene privilegios para ver este contenido, por favor inicie sesión');
-        window.location.href = urlEndpoint+'login/login.html'; 
+        window.location.href = config('url')+"/login";
     }
-   
 }
 
 function pictureProfile(accessToken){
@@ -371,7 +287,6 @@ function changePassword(){
             if(err.message === 'User is not authorized to change password'){
                 alert('Su usuario no tiene permitido hacer cambio de contraseña');
             }
-        }else{
         }
     });
 }
@@ -389,11 +304,8 @@ function showUserActions(){
     });
 }
 
-
 function goToLogin(){
-    var this_url = window.location.href;
-    window.location.href = urlEndpoint+'/login/login.html?redirect_uri='+this_url; 
-
+    window.location.href = config('url')+'/login'; 
 }
 
 //Function to update pofile user
@@ -470,7 +382,6 @@ function updateProfile(){
           Name: 'picture', 
           Value: 'https://image.flaticon.com/icons/svg/1177/1177568.svg' //$("#pictureProfile").val()
         }*/
-        // more items 
       ]
     };
     console.log('updateUserAttributes >>>');
@@ -491,16 +402,17 @@ function updateProfile(){
 }
 
 /*
-This method will get temporary credentials for AWS using the IdentityPoolId and the Id Token recieved from AWS Cognito authentication provider.
+This method will get temporary credentials for AWS using the IdentityPoolId 
+and the Id Token recieved from AWS Cognito authentication provider.
 */
 function getCognitoIdentityCredentials(cognito_id_token){
 
-    AWS.config.region = region;
+    AWS.config.region = config('region');
     var loginMap = {};
-    loginMap['cognito-idp.' + region + '.amazonaws.com/' + userPoolId] = cognito_id_token;
+    loginMap['cognito-idp.' + config('region') + '.amazonaws.com/' + config('userPoolId')] = cognito_id_token;
 
     AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-        IdentityPoolId: identityPoolId,
+        IdentityPoolId: config('identityPoolId'),
         Logins: loginMap
     });
 
@@ -525,99 +437,9 @@ function getCognitoIdentityCredentials(cognito_id_token){
 
         $("#loader").hide();
     });
-
-
-    /*
-    //Buket AWS
-    var bucketName = "profilescognito";
-
-    AWS.config.update({
-        region: region,
-        credentials: new AWS.CognitoIdentityCredentials({
-            IdentityPoolId: identityPoolId
-        })
-    });
-
-    var s3 = new AWS.S3({
-        apiVersion: '2006-03-01',
-        params: {Bucket: bucketName}
-    });
-
-    var files = document.getElementById('pictureProfile').files;
-    if (files) {
-        var file = files[0];
-        var fileName = file.name;
-        var fileUrl = 'https://' + region + '.amazonaws.com/' +  fileName;
-        s3.upload({
-            Key: fileName,
-            Body: file,
-            ACL: 'public-read'
-            }, 
-        function(err, data) {
-            if(err) {
-                console.log(err.message);
-            }else{
-                var newAvatar = Object.values(data)[0];
-
-                var params = {
-                  AccessToken: cognito_access_token,
-                  UserAttributes: [ 
-                    {
-                      Name: 'picture', 
-                      Value: newAvatar //$("#pictureProfile").val()
-                    }
-                  ]
-                };
-                console.log('updateUser Avatar >>>');
-                cognitoidentityserviceprovider.updateUserAttributes(params, function(err, data) {
-                    if (err){
-                        //console.log(err, err.stack); // an error occurred
-                        console.log(err.message);
-                    }else{
-                        //console.log(data);           // successful response
-                        console.log('Done!');
-                        $("#msgSuccess").html('<img src="https://image.flaticon.com/icons/svg/1828/1828652.svg" width="15"/> Fotografía actualizada...');
-                        $("#msgSuccess").fadeIn(200);
-                        setTimeout(function(){
-                            $("#msgSuccess").fadeOut(200);
-                        }, 1800);
-                        location.reload();  
-                    }
-                });
-            }
-            
-        });
-
-    }
-
-    */
-
-    /*
-    AWS.config.credentials.get(function(err) {
-        if (err){
-            $("#tempCredentials").html(err.message);
-        } else {
-            logMessage('AWS Access Key: '+ AWS.config.credentials.accessKeyId);
-            logMessage('AWS Secret Key: '+ AWS.config.credentials.secretAccessKey);
-            logMessage('AWS Session Token: '+ AWS.config.credentials.sessionToken);
-            $("#tempCredentials").html('<h5>Temporary credentials</h5>'+
-                'AWS Access Key: '+ 
-                AWS.config.credentials.accessKeyId + '<br>' + 
-                'AWS Secret Key: '+ 
-                AWS.config.credentials.secretAccessKey + '<br>'
-            );
-        }
-
-    });
-    */
 }
 
 function changePincture(){
-    /*console.log('changePincture function start');
-    console.log('AWS Access Key: '+ accessKey);
-    console.log('AWS Secret Key: '+ secretKey);*/
-    //var creds = new AWS.Credentials(accessKey, secretKey, sessionKey);
-
     //Buket AWS
     var bucketName = "profilescognito";
 
@@ -636,7 +458,7 @@ function changePincture(){
     if (files) {
         var file = files[0];
         var fileName = file.name;
-        var fileUrl = 'https://' + region + '.amazonaws.com/' +  fileName;
+        var fileUrl = 'https://' + config('region') + '.amazonaws.com/' +  fileName;
         s3.upload({
             Key: fileName,
             Body: file,
@@ -680,7 +502,5 @@ function changePincture(){
     }else{
         console.log('No ha elegido archivo');
     }
-
     console.log('Do s3 functions');
 }
-

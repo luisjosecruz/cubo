@@ -10,6 +10,7 @@
 	<link rel="stylesheet" href="../assets/css/fonts.css">
 	<link rel="stylesheet" href="../assets/css/base.css">
 	<link rel="stylesheet" href="../assets/css/style.css">
+	<link rel="stylesheet" href="../assets/css/loast.css">
 </head>
 <body>
 	

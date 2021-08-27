@@ -79,10 +79,14 @@ HEADER
 }
 
 .user-config{
-    width: 30px;
-    height: 60px;
+    width: 33px;
+    height: 33px;
     display: flex;
     margin: 0 5px;
+}
+
+.user-config img{
+    border-radius: 100px;
 }
 
 .user-options{

@@ -12,7 +12,6 @@ switch($URI){
     case '/login':
         require_once('includes/head.inc.php');
         require_once('login.html'); 
-        require_once('includes/footer.inc.php');
         break;
 }
 ?>

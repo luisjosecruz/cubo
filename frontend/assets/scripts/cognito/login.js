@@ -1,15 +1,9 @@
-// demo 
-// const urlEndpoint = "http://cubo.development.localhost/"; 
-const urlEndpoint = "http://localhost:3000/"; 
+const urlEndpoint = config('url')+'/';
 
-// production 
-// const urlEndpoint = "https://cubo.elmundo.sv/"; 
-
-const validation = urlEndpoint+"login.html";
-const url_token = 'https://demdrive.auth.us-west-2.amazoncognito.com/oauth2/token';
+const url_token = config('url_token');
 
 function googleSignUpButton(){
-    window.location.href = `https://demdrive.auth.us-west-2.amazoncognito.com/oauth2/authorize?identity_provider=Google&redirect_uri=${urlEndpoint}validation.html&response_type=CODE&client_id=4an9qm3m50br1khn7gl5tonnaa&amp;scope=aws.cognito.signin.user.admin email openid profile`;
+    window.location.href = `https://demdrive.auth.us-west-2.amazoncognito.com/oauth2/authorize?identity_provider=Google&redirect_uri=${config('url')}/validation.html&response_type=CODE&client_id=4an9qm3m50br1khn7gl5tonnaa&amp;scope=aws.cognito.signin.user.admin email openid profile`;
 }
 
 let loginForm = document.getElementById("loginForm");
@@ -102,86 +96,59 @@ var idToken;
 var userPool;
 
 var poolData = { 
-    UserPoolId : userPoolId,
-    ClientId : clientId
+    UserPoolId : config('userPoolId'),
+    ClientId : config('clientId')
 };
 cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider({region: 'us-west-2'});
 
-function parseJwt(token) {
-    try {
-        // Get Token Header
-        const base64HeaderUrl = token.split('.')[0];
-        const base64Header = base64HeaderUrl.replace('-', '+').replace('_', '/');
-        const headerData = JSON.parse(window.atob(base64Header));
-
-        // Get Token payload and date's
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace('-', '+').replace('_', '/');
-        const dataJWT = JSON.parse(window.atob(base64));
-        dataJWT.header = headerData;
-
-        // TODO: add expiration at check ...
-        return dataJWT;
-    } catch (err) {
-        return false;
-    }
-}
-
-/*
-Function login CognitoUserPool
-*/
+// Function login CognitoUserPool
 function loginUser(){
     let urlParams = new URLSearchParams(window.location.search);
     let redirect_uri = urlParams.get('redirect_uri');
     
-    if( ($('#emailInput').val() === "") || ($("#passwordInput").val() === "") ){
-        $("#log").html('Por favor ingrese su usuario y contraseña');
+    if(($('#emailInput').val() === "") || ($("#passwordInput").val() === "")){
+        loast.show("Ingresar usuario y contraseña", "warning");
     }else{
-
         var authenticationData = {
             Username : $('#emailInput').val(),
             Password : $("#passwordInput").val()
         };
-        var authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails(authenticationData);
-        
-        userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
+        var authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails(authenticationData);
+        userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+        
         var userData = {
             Username : $('#emailInput').val(),
             Pool : userPool
         };
-
+        
         cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
-
-        //console.log(cognitoUser);
-
+        
+        loast.show("Iniciando sesión ...", "success");
+        
         cognitoUser.authenticateUser(authenticationDetails, {
             onSuccess: function (result) {
-                //logMessage('Iniciando sesión...');
                 
                 idToken = result.getIdToken().getJwtToken();
 
-                let attr = parseJwt(idToken);
+                let attr = parseJWT(idToken);
                 let type_user = parseInt(attr.zoneinfo);
 
-                localStorage.setItem('aws.cognito.'+clientId+'.IdentityProvider', 'Cognito');
-                localStorage.setItem('aws.cognito.'+clientId+'.username', $('#signInFormUsername').val());
-                localStorage.setItem('aws.cognito.'+clientId+".idToken", idToken);
+                localStorage.setItem('aws.cognito.'+config('clientId')+'.IdentityProvider', 'Cognito');
+                localStorage.setItem('aws.cognito.'+config('clientId')+'.username', $('#signInFormUsername').val());
+                localStorage.setItem('aws.cognito.'+config('clientId')+".id_token", idToken);
 
-                setTimeout(function(){
-                    window.location.href = urlEndpoint;
-                }, 1000);
-
+                window.location.href = config('url');
             },
 
             onFailure: function(err) {
                 logMessage(err.message);
                 if(err.message === 'Missing required parameter USERNAME'){
-                    $("#log").html('Correo electrónico requerido.');
+                    loast.show("Correo electrónico requerido.", "warning");
                 }
 
                 if(err.message === 'Incorrect username or password.'){
-                    $("#log").html('Correo o contraseña invalida.');
+                    loast.show("Correo o contraseña invalida.", "warning");
                 }
             },
 
@@ -189,16 +156,14 @@ function loginUser(){
 
         return false;
     }
-
 }
 
 function requestCod(){
-    //alert($("#emailInput").val());
     if($("#emailInput").val() === ""){
-        $("#log").html('Por favor Ingrese su dirección de correo');
+        loast.show("Ingresar dirección de correo electrónico", "info");
     }else{
         var params = {
-            ClientId: clientId,
+            ClientId: config('clientId'),
             Username: $("#emailInput").val(),
         };
         cognitoidentityserviceprovider.forgotPassword(params, function(err, data) {
@@ -214,7 +179,6 @@ function requestCod(){
             }
         });    
     }
-                  
 }
 
 function setNewPassword(){
@@ -223,7 +187,7 @@ function setNewPassword(){
         $("#log").html('Por favor ingrese el código de 6 digitos');
     }else{
         var params = {
-          ClientId: clientId,
+          ClientId: config('clientId'),
           ConfirmationCode: $("#verificationcode").val(),
           Password: $("#passwordInput").val(),
           Username: $("#emailInput").val(),
@@ -235,7 +199,6 @@ function setNewPassword(){
             $("#log").html('Contraseña actualizada exitosamente\nPuede iniciar sesión');
 
             setTimeout(function(){
-                //reload.location();
                 location.reload();
             }, 1000);
           }
@@ -243,9 +206,7 @@ function setNewPassword(){
     }
 }
 
-/*
-Starting point for user registration flow with input validation
-*/
+// Starting point for user registration flow with input validation
 function register(){
     $('#log').html('');
     
@@ -259,13 +220,10 @@ function register(){
             $("#passwdRe").fadeOut();
             logMessage('Por favor verifique, la contraseña no coincide!');
         }
-        
     }
 }
 
-/*
-User registration using AWS Cognito
-*/
+// User registration using AWS Cognito
 function registerUser(username, lname, email, password, typeuser){
     userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
@@ -344,7 +302,6 @@ function registerUser(username, lname, email, password, typeuser){
         $("#loader").hide();
     });
 }
-
 
 function checkPasswordHelper(password) {
     var passwordPolicy = [];
@@ -461,108 +418,9 @@ function checkPasswordMatch() {
     }
     var canSubmit = hasUsername && hasValidPassword && !formSubmitted;
     $('button[name="signUpButton"]').prop("disabled", !canSubmit);
-    //$('#requiredUI').toast('show');
-    
 }
 
-/*
-This is a logging method that will be used throught the application
-*/
+//This is a logging method that will be used throught the application
 function logMessage(message, action){
-    $('#log').html(message);   
+    console.log(message);   
 }
-/*
-function getParams (url) {
-    var params = {};
-    var parser = document.createElement('a');
-    parser.href = url;
-    var query = parser.search.substring(1);
-    var vars = query.split('&');
-    for (var i = 0; i < vars.length; i++) {
-        var pair = vars[i].split('=');
-        params[pair[0]] = decodeURIComponent(pair[1]);
-    }
-    return params;
- };
-
-$(document).ready(function(){
-    // Get parameters from a URL string
-    var str = window.location.href;
-    // Rreplace # by ?
-    var url_other = str.replace('#', '?');
-    var url_clean = url_other.replace('?_', '');
-    //alert(url_clean);
-    var objectCode = getParams(url_clean);
-    var code = (objectCode.code) ? objectCode.code : "";
-
-
-    if (code.trim().length > 0) {
-
-        if (localStorage.getItem('aws.cognito.'+clientId+'.access_token') != null) {
-            var cognito_access_token  = localStorage.getItem('aws.cognito.'+clientId+'.access_token');
-            var cognito_id_token      = localStorage.getItem('aws.cognito.'+clientId+'.id_token');
-            var cognito_refresh_token = localStorage.getItem('aws.cognito.'+clientId+'.refresh_token');
-        }else{
-            var settings = {
-                "async": false,
-                "crossDomain": true,
-                "url": url_token,
-                "method": "POST",
-                "headers": {
-                "content-type": "application/x-www-form-urldecoded; charset=utf-8",
-                "cache-control": "no-cache"
-                },
-                "data": {
-                "grant_type": "authorization_code",
-                "client_id": clientId,
-                "code": code,
-                "redirect_uri": validation
-                }
-            }
-            $.ajax(settings).done(function (response) {
-                
-                console.log('Savign JWT');
-                localStorage.setItem('aws.cognito.'+clientId+'.id_token', response.id_token);
-                localStorage.setItem('aws.cognito.'+clientId+'.refresh_token', response.refresh_token);
-                localStorage.setItem('aws.cognito.'+clientId+'.access_token', response.access_token);
-
-                //Obtenemos el usuario & IDP
-                var usrIDP   = parseJwt(response.access_token);
-                var IDP      = parseJwt(response.id_token);
-                var usernameIDP = usrIDP.username;
-
-                console.log(IDP);
-                localStorage.setItem("aws.cognito."+clientId+'.user_data', JSON.stringify(IDP));
-                
-                if(IDP.identities != undefined){
-                    var IdentityPro = IDP.identities[0].providerName;    
-                }else{
-                    var IdentityPro = 'cognito';
-                }
-                
-                //Saving username
-                localStorage.setItem('aws.cognito.'+clientId+'.username', usernameIDP);
-                //Saving IDP
-                switch(IdentityPro){
-                    case 'Facebook':
-                        localStorage.setItem('aws.cognito.'+clientId+'.IdentityProvider', IdentityPro);
-                    break;
-                    case 'gmail':
-                        localStorage.setItem('aws.cognito.'+clientId+'.IdentityProvider', IdentityPro);
-                    break;
-                    default:
-                        localStorage.setItem('aws.cognito.'+clientId+'.IdentityProvider', IdentityPro);
-                    break;
-                }
-                //window.location.reload();
-                //window.location.href = 'index.html';
-                getUser(response.access_token);
-
-            });
-        }
-    }else{
-        console.log("CODE NON EXIST");
-    }
-    var user_data = JSON.parse(localStorage.getItem("aws.cognito."+clientId+'.user_data'));
-    console.log(user_data);
-});*/

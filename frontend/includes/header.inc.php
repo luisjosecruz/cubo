@@ -20,7 +20,7 @@
 			</div>
 			<div class="account">
 				<div class="user-config user-img">
-					<img src="https://static.elmundo.sv/letters_cognito/L.svg">
+					<img id="userPicture" src="https://static.elmundo.sv/letters_cognito/L.svg">
 				</div>
 				<div class="user-config user-options user-options-btn">
 					<a>
@@ -48,7 +48,7 @@
 							</a>
 						</li>
 						<li>
-							<a href="#">
+							<a href="#" id="logout">
 								<i class="icon-logout"></i>
 								<span>Cerrar sesión</span>
 							</a>

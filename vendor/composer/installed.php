@@ -6,19 +6,19 @@
     'aliases' => 
     array (
     ),
-    'reference' => 'aeec8da07c805ba8064c9c1e11d28c479a6fae9a',
-    'name' => '__root__',
+    'reference' => '0e09bc8861f1f213154bb8bec16e8da1907981c8',
+    'name' => 'luisjosecruz/cubo',
   ),
   'versions' => 
   array (
-    '__root__' => 
+    'luisjosecruz/cubo' => 
     array (
       'pretty_version' => 'dev-develop',
       'version' => 'dev-develop',
       'aliases' => 
       array (
       ),
-      'reference' => 'aeec8da07c805ba8064c9c1e11d28c479a6fae9a',
+      'reference' => '0e09bc8861f1f213154bb8bec16e8da1907981c8',
     ),
     'phpmailer/phpmailer' => 
     array (

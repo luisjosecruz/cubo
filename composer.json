@@ -1,5 +1,22 @@
-{
+{   
+    "name": "luisjosecruz/cubo",
+    "description": "App to manage everything related to newspaper printing and epaper publishing",
+    "author": [
+        {
+            "name": "Luis José Cruz Martínez",
+            "email": "luisjosecruzmart@gmail.com",
+            "homepage": "https://www.luisjosecruz.com",
+            "role": "Developer/Admin"
+        }
+    ],
     "require": {
         "phpmailer/phpmailer": "^6.5"
-    }
+    },
+    "autoload": {
+        "psr-4": {
+            "Config\\":"backend/config/",
+            "Controller\\":"backend/controller/",
+            "Model\\":"backend/model/"
+        }
+    } 
 }
