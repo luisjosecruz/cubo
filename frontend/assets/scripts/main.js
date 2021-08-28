@@ -1,5 +1,5 @@
 /*  --------------------------------------------------------------------------
-    GET USER VARIABLES
+  DECLARACIÓN DE VARIABLES GLOBALES
   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 let tokenAWS = config('id_token');
 let idTokenAWS = localStorage.getItem(tokenAWS);
@@ -27,28 +27,30 @@ if (!access_token) window.location.href = config('url')+'/login';
 function logout(){
   loast.show("Cerrando sesión ...", "success");
   window.localStorage.clear();
-  setTimeout(() => window.location.href = config('url')+'/login' , 1500);
+  setTimeout(() => window.location.href = config('url')+'/login' , 1000);
 }
 
-// Get permissions for user logged in
-function getPermits(given_name, family_name, email, zoneinfo){
-  
+// function to execute getJSON
+function doGetJSON(data, url){
+  $.getJSON(url, data).done((response) => {
+      handleDataJSON(response);
+    }).fail(() => {
+      console.log('Something is wrong');
+    });
 }
 
-/*  --------------------------------------------------------------------------
-    DOCUMENT READY
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-  
-$(document).ready(function() {
-/*  --------------------------------------------------------------------------
-    DECLARACIÓN DE CONSTANTES GLOBALES
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+function handleDataJSON(response){
+  let dataType = typeof(response);
+  console.log(dataType);
+  console.log(response);
+}
 
-/*  --------------------------------------------------------------------------
-    POPUP USER CONFIG    
-  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+// Initialización
+function init(given_name, family_name, email, zoneinfo){
+  // user configuration
   let user_options = $(".user-options-btn");
   let wrapper_options = $(".wraper-options");
+  let fullname = `${given_name} ${family_name}`;
   
   // show popup
   user_options.click((e) => {
@@ -60,20 +62,27 @@ $(document).ready(function() {
   wrapper_options.click((e) => e.stopPropagation());
   $(document).click(() => wrapper_options.removeClass("show"));
 
-  // set user picture
+  // set user JSON.parse(data)
   document.getElementById('userPicture').setAttribute('src', picture);
+  document.getElementById('userName').textContent = given_name+" "+family_name;
+  document.getElementById('userEmail').textContent = email;
+
+  // Get permissions for user logged in
+  let data = { 'fullname': fullname, 'email': email, 'zoneinfo': zoneinfo, 'request': 'permits' };
+  doGetJSON(data, 'src/callRest.php');
+}
+
+
+/*  --------------------------------------------------------------------------
+    DOCUMENT READY
+  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+  
+$(document).ready(function() {
+  // user permits
+  init(given_name, family_name, email, zoneinfo);
 
   // call log out function
   document.getElementById("logout").addEventListener("click", logout);
 });
 
 
-
-// $.ajax({
-//     type: "POST",
-//     url: 'http://localhost/cubo_development/backend/config/sendEnv.php',
-//     data: '',
-//     success: (data) => {
-//         console.log(data);
-//     }
-// });
